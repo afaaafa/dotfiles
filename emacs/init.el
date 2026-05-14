@@ -149,7 +149,7 @@ If the new path's directories does not exist, create them."
 
 (set-face-attribute 'default nil
                     :font "JetBrainsMono Nerd Font"
-                    :height 140)
+                    :height 110)
 
 ;; Dashboard
 (use-package dashboard
