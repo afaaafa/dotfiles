@@ -422,19 +422,36 @@ If the new path's directories does not exist, create them."
 
 (use-package vterm
   :ensure t
+  :commands vterm
   :custom
-  (vterm-max-scrollback 10000)
   (vterm-shell "bash")
+  (vterm-max-scrollback 10000)
   :config
+  (add-hook 'vterm-mode-hook #'goto-address-mode)
 
-  (defun my/vterm-project-root ()
-    (interactive)
-    (let ((default-directory (my/project-root)))
-      (vterm (format "vterm: %s" (project-name (project-current))))))
-  
-  (setq vterm-copy-mode-utils-keys t))
+  (define-key vterm-mode-map (kbd "C-y") #'vterm-yank)
+  (define-key vterm-mode-map (kbd "M-w") #'kill-ring-save)
+  (define-key vterm-mode-map (kbd "C-c C-k") #'vterm-copy-mode)
+  (define-key vterm-mode-map (kbd "C-c C-l") #'vterm-clear)
 
-(global-set-key (kbd "C-c t") #'my/vterm-project-root)
+  (define-key vterm-mode-map (kbd "C-c C-n")
+              (lambda ()
+                (interactive)
+                (vterm (generate-new-buffer-name "vterm")))))
+
+(defun my/project-vterm ()
+  (interactive)
+  (let ((default-directory
+         (if-let ((project (project-current nil)))
+             (project-root project)
+           default-directory)))
+    (vterm)))
+
+(use-package vterm-toggle
+  :ensure t
+  :bind
+  (("C-." . vterm-toggle)
+   ("C-c t" . my/project-vterm)))
 
 ;; Orderless: powerful completion style
 (use-package orderless
@@ -490,7 +507,16 @@ If the new path's directories does not exist, create them."
 		 "720838034f1dd3b3da66f6bd4d053ee67c93a747b219d1c546c41c4e425daf93"
 		 default))
  '(org-agenda-files '("/home/af/org/work.org"))
- '(package-selected-packages '(eglot which-key)))
+ '(package-selected-packages
+	 '(avy cape corfu-terminal dashboard
+				 doom-modeline doom-themes
+				 eca eglot embark-consult
+				 exec-path-from-shell
+				 inf-ruby kind-icon magit
+				 marginalia orderless
+				 org-bullets rainbow-mode
+				 solaire-mode vertico vterm
+				 vterm-toggle wgrep)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
