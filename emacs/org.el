@@ -90,6 +90,7 @@
                                         ; capture templates will look here.
 
 (setq org-agenda-files '("inbox.org" "calendar.org" "work.org"))
+(global-set-key (kbd "C-c a") #'org-agenda)
 
 ;; Default tags
 (setq org-tag-alist '(
