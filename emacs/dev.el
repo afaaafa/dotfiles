@@ -1,3 +1,21 @@
+
+(setq treesit-language-source-alist
+   '((bash "https://github.com/tree-sitter/tree-sitter-bash")
+     (cmake "https://github.com/uyha/tree-sitter-cmake")
+     (css "https://github.com/tree-sitter/tree-sitter-css")
+     (elisp "https://github.com/Wilfred/tree-sitter-elisp")
+     (go "https://github.com/tree-sitter/tree-sitter-go")
+     (html "https://github.com/tree-sitter/tree-sitter-html")
+     (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
+     (json "https://github.com/tree-sitter/tree-sitter-json")
+     (make "https://github.com/alemuller/tree-sitter-make")
+     (markdown "https://github.com/ikatyang/tree-sitter-markdown")
+     (python "https://github.com/tree-sitter/tree-sitter-python")
+     (toml "https://github.com/tree-sitter/tree-sitter-toml")
+     (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
+     (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
+     (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
+
 (use-package emacs
   :ensure nil
   :hook
@@ -17,6 +35,22 @@
   :ensure t
   :hook
   ((prog-mode css-mode html-mode emacs-lisp-mode) . rainbow-mode))
+
+(use-package rainbow-delimiters
+  :ensure t
+  :hook
+  ((prog-mode . rainbow-delimiters-mode)
+   (emacs-lisp-mode . rainbow-delimiters-mode)))
+
+(use-package web-mode
+  :ensure t
+  :mode
+  ("\\.erb\\'" . web-mode)
+  ("\\.html\\'" . web-mode)
+  :config
+  (setq web-mode-markup-indent-offset 2)
+  (setq web-mode-code-indent-offset 2)
+  (setq web-mode-css-indent-offset 2))
 
 (use-package transient
   :ensure t)
@@ -100,10 +134,10 @@
   :ensure nil
   :hook
   ((ruby-ts-mode . eglot-ensure)
-   (ruby-mode . eglot-ensure))
-  :config
-  (add-to-list 'eglot-server-programs
-    '((ruby-ts-mode ruby-mode) . ("ruby-lsp"))))
+   (ruby-mode . eglot-ensure)))
+
+(with-eval-after-load 'eglot
+ (add-to-list 'eglot-server-programs '((ruby-mode ruby-ts-mode) "ruby-lsp")))
 
 (with-eval-after-load 'eglot
   (define-key eglot-mode-map (kbd "C-c l r") #'eglot-rename)
@@ -113,8 +147,7 @@
   (define-key eglot-mode-map (kbd "C-c l R") #'xref-find-references))
 
 (use-package flymake
-  :ensure nil
-  :hook (prog-mode . flymake-mode)
+  :ensure t
   :bind
   (:map flymake-mode-map
         ("C-c ! l" . flymake-show-buffer-diagnostics)

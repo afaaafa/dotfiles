@@ -113,9 +113,14 @@
                       ("reading")))
 
 (setq org-refile-targets
-    '(("calendar.org" :level . 1)
+    '(("calendar.org" :maxlevel . 2)
       ("done.org" :level . 1)))
-	
+
+;;; Org Roam
+(use-package org-roam
+	:ensure t
+	:custom
+	(org-roam-db-autosync-mode))
 
 ;; Org-roam variables
 (setq org-roam-directory "~/org-roam/")
@@ -164,88 +169,33 @@
 				(expand-file-name "inbox.org" org-directory))
 
 	(setq org-capture-templates
-				`(
+      '(("t" "Task" entry
+         (file "inbox.org")
+         "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:\n")
 
-					;; =========================
-					;; INBOX
-					;; =========================
+        ("n" "Note" entry
+         (file "inbox.org")
+         "* %?\n:PROPERTIES:\n:CREATED: %U\n:END:\n")
 
-					("i" "Inbox")
+        ("j" "Journal" entry
+         (file+olp+datetree "journal.org")
+         "* %U\n\n%?\n")
 
-					("it" "Quick task" entry
-					 (file "inbox.org")
-					 "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:\n")
+				("e" "Event" entry
+			   (file "calendar.org")
+				"* %^{Title}\n%^T\n:PROPERTIES:\n:CREATED: %U\n:END:\n\n%?")
 
-					("in" "Quick note" entry
-					 (file "notes.org")
-					 "* %?\n:PROPERTIES:\n:CREATED: %U\n:END:\n")
+				("E" "All day event" entry
+				 (file "calendar.org")
+				 "* %^{Title}\n%^t\n:PROPERTIES:\n:CREATED: %U\n:END:\n\n%?")
 
-					("il" "Link with context" entry
-					 (file "inbox.org")
-					 "* TODO %?\n%U\n\n%i\n\nSource:\n%a")
+        ("d" "Deadline" entry
+         (file "calendar.org")
+         "* TODO %?\nDEADLINE: %^t\n:PROPERTIES:\n:CREATED: %U\n:END:\n")
 
-					;; =========================
-					;; WORK
-					;; =========================
-
-					("w" "Work")
-
-					("wt" "Work task" entry
-					 (file+headline "work.org" "Tasks")
-					 "* TODO %?\nSCHEDULED: %^t\n:PROPERTIES:\n:CREATED: %U\n:END:\n")
-
-					("wm" "Meeting" entry
-					 (file+headline "work.org" "Meetings")
-					 "* MEETING with %^{Person}\n%U\n\n** Agenda\n- %?\n\n** Notes\n\n** Action Items\n")
-
-					("wr" "Work report" entry
-					 (file+headline "work.org" "Reports")
-					 "* %^{Title}\n%U\n\n%?")
-
-					;; =========================
-					;; CALENDAR / EVENTS
-					;; =========================
-
-					("c" "Calendar")
-
-					("ca" "All-day event" entry
-					 (file+headline "calendar.org" "Events")
-					 "* %^{Title}\n%^t\n:PROPERTIES:\n:LOCATION: %^{Location}\n:ALL_DAY: t\n:CREATED: %U\n:END:\n\n%?")
-
-					("ce" "Event" entry
-					 (file+headline "calendar.org" "Events")
-					 "* %^{Event title}\n<%^T>\n\n:PROPERTIES:\n:LOCATION: %^{Location}\n:CREATED: %U\n:END:\n\n%?")
-
-					("cd" "Deadline" entry
-					 (file+headline "calendar.org" "Deadlines")
-					 "* TODO %^{Task}\nDEADLINE: %^T\n:PROPERTIES:\n:CREATED: %U\n:END:\n")
-
-					;; =========================
-					;; CONTACTS
-					;; =========================
-
-					("p" "People / Contacts")
-
-					("pc" "Contact" entry
-					 (file+headline "contacts.org" "Contacts")
-					 "* %^{Full Name}\n:PROPERTIES:\n:EMAIL: %^{Email}\n:BIRTHDAY: %^{Birthday}t\n:PHONE: %^{Phone}\n:COMPANY: %^{Company}\n:CREATED: %U\n:END:\n\n** Notes\n%?")
-
-					;; =========================
-					;; JOURNAL
-					;; =========================
-
-					("j" "Journal entry" entry
-					 (file+olp+datetree "journal.org")
-					 "* %U\n\n%?")
-
-					;; =========================
-					;; IDEAS
-					;; =========================
-
-					("x" "Idea" entry
-					 (file+headline "ideas.org" "Ideas")
-					 "* %^{Idea title}\n%U\n\n%?")
-					))
+        ("c" "Contact" entry
+         (file "contacts.org")
+         "* %^{Full name}\n:PROPERTIES:\n:EMAIL: %^{Email}\n:PHONE: %^{Phone}\n:BIRTHDAY: %^{Birthday}t\n:CREATED: %U\n:END:\n\n%?\n")))
 
   ;; An agenda view lets you see your TODO items filtered and
   ;; formatted in different ways. You can have multiple agenda views;

@@ -37,7 +37,7 @@
 (setopt auto-revert-interval 5)
 (setopt auto-revert-check-vc-info t)
 (global-auto-revert-mode)
-
+(global-set-key [remap list-buffers] 'ibuffer)
 ;; Save history of minibuffer
 (savehist-mode 1)
 
@@ -148,8 +148,8 @@ If the new path's directories does not exist, create them."
   (doom-modeline-mode 1))
 
 (set-face-attribute 'default nil
-                    :font "JetBrainsMono Nerd Font"
-                    :height 110)
+                    :font "Iosevka Nerd Font"
+                    :height 120)
 
 ;; Dashboard
 (use-package dashboard
@@ -245,7 +245,7 @@ If the new path's directories does not exist, create them."
   (doom-themes-enable-italic t)
 
   :config
-	(load-theme 'doom-one t)
+	(load-theme 'doom-1337 t)
   (doom-themes-visual-bell-config)
   (doom-themes-org-config))
 
@@ -439,19 +439,19 @@ If the new path's directories does not exist, create them."
                 (interactive)
                 (vterm (generate-new-buffer-name "vterm")))))
 
-(defun my/project-vterm ()
+(defun my/project-vterm-new ()
   (interactive)
   (let ((default-directory
          (if-let ((project (project-current nil)))
              (project-root project)
            default-directory)))
-    (vterm)))
+    (vterm (generate-new-buffer-name "*vterm*"))))
 
 (use-package vterm-toggle
   :ensure t
   :bind
   (("C-." . vterm-toggle)
-   ("C-c t" . my/project-vterm)))
+   ("C-c t" . my/project-vterm-new)))
 
 ;; Orderless: powerful completion style
 (use-package orderless
@@ -480,8 +480,18 @@ If the new path's directories does not exist, create them."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(corfu-auto t)
  '(custom-safe-themes
-	 '("456697e914823ee45365b843c89fbc79191fdbaff471b29aad9dcbe0ee1d5641"
+	 '("2f7fa7a92119d9ed63703d12723937e8ba87b6f3876c33d237619ccbd60c96b9"
+		 "921f165deb8030167d44eaa82e85fcef0254b212439b550a9b6c924f281b5695"
+		 "088cd6f894494ac3d4ff67b794467c2aa1e3713453805b93a8bcb2d72a0d1b53"
+		 "aec7b55f2a13307a55517fdf08438863d694550565dee23181d2ebd973ebd6b8"
+		 "9b9d7a851a8e26f294e778e02c8df25c8a3b15170e6f9fd6965ac5f2544ef2a9"
+		 "83550d0386203f010fa42ad1af064a766cfec06fc2f42eb4f2d89ab646f3ac01"
+		 "93011fe35859772a6766df8a4be817add8bfe105246173206478a0706f88b33d"
+		 "df6dfd55673f40364b1970440f0b0cb8ba7149282cf415b81aaad2d98b0f0290"
+		 "e4a702e262c3e3501dfe25091621fe12cd63c7845221687e36a79e17cf3a67e0"
+		 "456697e914823ee45365b843c89fbc79191fdbaff471b29aad9dcbe0ee1d5641"
 		 "0d2c5679b6d087686dcfd4d7e57ed8e8aedcccc7f1a478cd69704c02e4ee36fe"
 		 "b5fd9c7429d52190235f2383e47d340d7ff769f141cd8f9e7a4629a81abc6b19"
 		 "4990532659bb6a285fee01ede3dfa1b1bdf302c5c3c8de9fad9b6bc63a9252f7"
@@ -508,15 +518,11 @@ If the new path's directories does not exist, create them."
 		 default))
  '(org-agenda-files '("/home/af/org/work.org"))
  '(package-selected-packages
-	 '(avy cape corfu-terminal dashboard
-				 doom-modeline doom-themes
-				 eca eglot embark-consult
-				 exec-path-from-shell
-				 inf-ruby kind-icon magit
-				 marginalia orderless
-				 org-bullets rainbow-mode
-				 solaire-mode vertico vterm
-				 vterm-toggle wgrep)))
+	 '(avy cape corfu-terminal dashboard doom-modeline doom-themes eca
+				 eglot embark-consult exec-path-from-shell inf-ruby json-mode
+				 kind-icon magit marginalia orderless org-bullets org-roam
+				 rainbow-delimiters rainbow-mode slim-mode solaire-mode
+				 vertico vterm-toggle web-mode wgrep yaml-mode)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
