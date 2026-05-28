@@ -245,7 +245,7 @@ If the new path's directories does not exist, create them."
   (doom-themes-enable-italic t)
 
   :config
-	(load-theme 'doom-1337 t)
+	(load-theme 'doom-gruvbox t)
   (doom-themes-visual-bell-config)
   (doom-themes-org-config))
 
